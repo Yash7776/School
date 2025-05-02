@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React,{ useContext,useState } from 'react';
 import AuthContext from '../Contex/AuthContext.jsx';
-
+import Loading from "./Loading.jsx";
 const Login = () => {
   const { loginUser } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate__animated animate__headShake">
+      
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">

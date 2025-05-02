@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
+import Loading from "../components/Loading.jsx";
 
 const AuthContext = createContext();
 
@@ -10,10 +11,12 @@ export const AuthProvider = ({ children }) => {
     let [authToken, setauthToken] = useState(() => localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null)
     let [user, setUser] = useState(() => localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('data')) : null)
     let navigate = useNavigate();
+    let [loading, setLoading] = useState(false);
 
 
     const loginUser = async (e) => {
         e.preventDefault();
+        setLoading(true);
         console.log("Work");
             let response = await fetch('http://127.0.0.1:8000/api/login/', {
                 method: 'POST',
@@ -37,13 +40,16 @@ export const AuthProvider = ({ children }) => {
                 await userprofile(access)
                 toast.success("Login Sucessfully")
                 navigate("/")
+                setLoading(false);
             }
             else {
-                toast.error(data.msg)
+                toast.error(data.error)
+                setLoading(false);
             }
     }
     const registerUser = async (e) => {
         e.preventDefault();
+        setLoading(true);
         console.log("Work");
             let response = await fetch('http://127.0.0.1:8000/api/register/', {
                 method: 'POST',
@@ -66,9 +72,11 @@ export const AuthProvider = ({ children }) => {
             if (response.status === 201) {
                 toast.success("User Registerd Please Login Using Your Credentials")
                 navigate("/login")
+                setLoading(false);
             }
             else {
-                toast.error(data.msg)
+                toast.error(data.error)
+                setLoading(false);
             }
     }
     const userprofile = async (access) => {
@@ -89,6 +97,7 @@ export const AuthProvider = ({ children }) => {
 
     const postFeedBack = async (e) => {
         e.preventDefault()
+        setLoading(true);
         console.log("Posting FeedBack");
         let authToken = JSON.parse(localStorage.getItem('authToken'))
         let access = authToken
@@ -108,14 +117,16 @@ export const AuthProvider = ({ children }) => {
             console.log({ 'response': response })
             if (response.status === 201) {
                 window.location.reload("/");
+                setLoading(false);
             }
             else {
-                toast.error(data.msg)
-                
+                toast.error(data.error)
+                setLoading(false);
             }
     }
     const postInstruction = async (e) => {
         e.preventDefault()
+        setLoading(true);
         console.log("Posting Instruction");
         let authToken = JSON.parse(localStorage.getItem('authToken'))
         let access = authToken
@@ -134,12 +145,15 @@ export const AuthProvider = ({ children }) => {
             console.log({ 'response': response })
             if (response.status === 201) {
                 window.location.reload("/");
+                setLoading(false);
             }
             else {
-                toast.error(data.msg)
+                toast.error(data.error)
+                setLoading(false)
             }
     }
     const logoutUser = () => {
+        setLoading(true)
         setauthToken(null)
         setUser(null)
         localStorage.removeItem('authToken')
@@ -147,19 +161,21 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('access')
         toast.warning("Logout Succesfully")
         navigate('/login')
+        setLoading(false)
     }
     let contextData = {
         authToken:authToken,
         user: user,
         loginUser:loginUser,
-        registerUser,registerUser,
-        logoutUser,logoutUser,
-        postFeedBack,postFeedBack,
-        postInstruction,postInstruction,
+        registerUser:registerUser,
+        logoutUser:logoutUser,
+        postFeedBack:postFeedBack,
+        postInstruction:postInstruction,
     }
     
     return (
         <AuthContext.Provider value={contextData}>
+            {loading && <Loading />}
             {children}
         </AuthContext.Provider>
     )
