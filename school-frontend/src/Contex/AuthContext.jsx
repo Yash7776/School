@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
         e.preventDefault();
         setLoading(true);
         console.log("Work");
+        try {
             let response = await fetch('http://127.0.0.1:8000/api/login/', {
                 method: 'POST',
                 headers: {
@@ -46,11 +47,18 @@ export const AuthProvider = ({ children }) => {
                 toast.error(data.error)
                 setLoading(false);
             }
+        }
+        catch (error) {
+            navigate("/notfound")
+            toast.info("Server Is Unrechable")
+            setLoading(false)
+        }
     }
     const registerUser = async (e) => {
         e.preventDefault();
         setLoading(true);
         console.log("Work");
+        try {
             let response = await fetch('http://127.0.0.1:8000/api/register/', {
                 method: 'POST',
                 headers: {
@@ -78,9 +86,15 @@ export const AuthProvider = ({ children }) => {
                 toast.error(data.error)
                 setLoading(false);
             }
+        }catch (error) {
+            navigate("/notfound")
+            toast.info("Server Is Unrechable")
+            setLoading(false)
+        }
     }
     const userprofile = async (access) => {
-            let response = await fetch('http://127.0.0.1:8000/api/me/',{
+        try {
+            let response = await fetch('http://127.0.0.1:8000/api/me/', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -92,6 +106,11 @@ export const AuthProvider = ({ children }) => {
             console.log({ 'response': response })
             localStorage.setItem('data', JSON.stringify(data))
             setUser(data)
+        }catch (error) {
+            navigate("/notfound")
+            toast.info("Server Is Unrechable")
+            setLoading(false)
+        }
     }
     // #################################################################################################
 
@@ -99,8 +118,9 @@ export const AuthProvider = ({ children }) => {
         e.preventDefault()
         setLoading(true);
         console.log("Posting FeedBack");
-        let authToken = JSON.parse(localStorage.getItem('authToken'))
-        let access = authToken
+        try {
+            let authToken = JSON.parse(localStorage.getItem('authToken'))
+            let access = authToken
             let response = await fetch('http://127.0.0.1:8000/api/feedback/', {
                 method: 'POST',
                 headers: {
@@ -123,13 +143,20 @@ export const AuthProvider = ({ children }) => {
                 toast.error(data.error)
                 setLoading(false);
             }
+        }
+        catch (error) {
+            navigate("/notfound")
+            toast.info("Server Is Unrechable")
+            setLoading(false)
+        }
     }
     const postInstruction = async (e) => {
         e.preventDefault()
         setLoading(true);
         console.log("Posting Instruction");
-        let authToken = JSON.parse(localStorage.getItem('authToken'))
-        let access = authToken
+        try {
+            let authToken = JSON.parse(localStorage.getItem('authToken'))
+            let access = authToken
             let response = await fetch('http://127.0.0.1:8000/api/instructions/', {
                 method: 'POST',
                 headers: {
@@ -151,6 +178,11 @@ export const AuthProvider = ({ children }) => {
                 toast.error(data.error)
                 setLoading(false)
             }
+        }catch (error) {
+            navigate("/notfound")
+            toast.info("Server Is Unrechable")
+            setLoading(false)
+        }
     }
     const logoutUser = () => {
         setLoading(true)
@@ -164,15 +196,15 @@ export const AuthProvider = ({ children }) => {
         setLoading(false)
     }
     let contextData = {
-        authToken:authToken,
+        authToken: authToken,
         user: user,
-        loginUser:loginUser,
-        registerUser:registerUser,
-        logoutUser:logoutUser,
-        postFeedBack:postFeedBack,
-        postInstruction:postInstruction,
+        loginUser: loginUser,
+        registerUser: registerUser,
+        logoutUser: logoutUser,
+        postFeedBack: postFeedBack,
+        postInstruction: postInstruction,
     }
-    
+
     return (
         <AuthContext.Provider value={contextData}>
             {loading && <Loading />}
