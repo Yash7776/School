@@ -132,6 +132,37 @@ class FeedbackView(APIView):
             return Response(serializer.errors, status=400)
         return Response({'error': 'Only students can submit feedback'}, status=403)
 
+class FeedbackDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk):
+        role = UserProfile.objects.get(user=request.user).role
+        if role != 'Headmaster':
+            return Response({'error': 'Only headmaster can edit feedback'}, status=403)
+        
+        try:
+            feedback = Feedback.objects.get(pk=pk)
+        except Feedback.DoesNotExist:
+            return Response({'error': 'Feedback not found'}, status=404)
+        
+        serializer = FeedbackSerializer(feedback, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def delete(self, request, pk):
+        role = UserProfile.objects.get(user=request.user).role
+        if role != 'Headmaster':
+            return Response({'error': 'Only headmaster can delete feedback'}, status=403)
+        
+        try:
+            feedback = Feedback.objects.get(pk=pk)
+            feedback.delete()
+            return Response({'message': 'Feedback deleted successfully'}, status=200)
+        except Feedback.DoesNotExist:
+            return Response({'error': 'Feedback not found'}, status=404)
+
 class InstructionView(APIView):
 
     permission_classes = [IsAuthenticated]
@@ -161,3 +192,34 @@ class InstructionView(APIView):
                 return Response(serializer.data, status=201)
             return Response(serializer.errors, status=400)
         return Response({'error': 'Only teachers and headmasters can post instructions'}, status=403)
+
+class InstructionDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk):
+        role = UserProfile.objects.get(user=request.user).role
+        if role != 'Headmaster':
+            return Response({'error': 'Only headmaster can edit instructions'}, status=403)
+        
+        try:
+            instruction = Instruction.objects.get(pk=pk)
+        except Instruction.DoesNotExist:
+            return Response({'error': 'Instruction not found'}, status=404)
+        
+        serializer = InstructionSerializer(instruction, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def delete(self, request, pk):
+        role = UserProfile.objects.get(user=request.user).role
+        if role != 'Headmaster':
+            return Response({'error': 'Only headmaster can delete instructions'}, status=403)
+        
+        try:
+            instruction = Instruction.objects.get(pk=pk)
+            instruction.delete()
+            return Response({'message': 'Instruction deleted successfully'}, status=200)
+        except Instruction.DoesNotExist:
+            return Response({'error': 'Instruction not found'}, status=404)

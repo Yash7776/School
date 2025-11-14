@@ -1,5 +1,5 @@
 from django.urls import path # type: ignore
-from .views import RegisterView, LoginView, UserDetailView, FeedbackView, InstructionView
+from .views import RegisterView, LoginView, UserDetailView, FeedbackView, InstructionView, FeedbackDetailView, InstructionDetailView
 from rest_framework_simplejwt.views import TokenVerifyView # type: ignore
 
 urlpatterns = [
@@ -8,5 +8,7 @@ urlpatterns = [
     path('verify/', TokenVerifyView.as_view()),
     path('me/', UserDetailView.as_view()),
     path('feedback/', FeedbackView.as_view()),
+    path('feedback/<int:pk>/', FeedbackDetailView.as_view()),
     path('instructions/', InstructionView.as_view()),
+    path('instructions/<int:pk>/', InstructionDetailView.as_view()),
 ]
