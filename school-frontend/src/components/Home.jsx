@@ -32,15 +32,30 @@ const Home = () => {
   {(user && user.profiles[0].role === "Headmaster") && <Instruction />}
 </section>
 
-<section className="grid md:grid-cols-3 gap-8 p-8 max-w-6xl mx-auto">
- 
-  {user && user.profiles[0].role === "Student" && <AllInstruction />}
-  {user && user.profiles[0].role === "Teacher" && <AllFeedBack />}
-  {user && user.profiles[0].role === "Headmaster" && (
-    <>
+<section className="p-8 max-w-7xl mx-auto">
+  {user && user.profiles[0].role === "Student" && (
+    <div className="max-w-4xl mx-auto">
       <AllInstruction />
+    </div>
+  )}
+  
+  {user && user.profiles[0].role === "Teacher" && (
+    <div className="max-w-4xl mx-auto">
       <AllFeedBack />
-    </>
+    </div>
+  )}
+  
+  {user && user.profiles[0].role === "Headmaster" && (
+    <div className="grid md:grid-cols-2 gap-8">
+      <div>
+        <h3 className="text-2xl font-bold text-green-800 mb-4">📋 Instructions</h3>
+        <AllInstruction />
+      </div>
+      <div>
+        <h3 className="text-2xl font-bold text-blue-800 mb-4">💬 Feedback</h3>
+        <AllFeedBack />
+      </div>
+    </div>
   )}
 </section>
 
