@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom'
 import AuthContext from '../Contex/AuthContext.jsx'
 import { useContext } from "react";
@@ -6,9 +6,11 @@ import FeedBack from './FeedBack.jsx'
 import Instruction from './Instruction.jsx'
 import AllFeedBack from './AllFeedBack.jsx'
 import AllInstruction from './AllInstructions.jsx'
+import UserManagement from './UserManagement.jsx'
 
 const Home = () => {
   let { user, logoutUser } = useContext(AuthContext)
+  const [activeTab, setActiveTab] = useState('dashboard')
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 font-sans">
@@ -114,31 +116,70 @@ const Home = () => {
         )}
         
         {user && user.profiles[0].role === "Headmaster" && (
-          <div className="grid lg:grid-cols-2 gap-6">
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-purple-100 hover:shadow-2xl transition-shadow">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-3 rounded-xl shadow-lg">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-800">Instructions</h3>
-              </div>
-              <AllInstruction isHeadmaster={true} />
+          <>
+            {/* Tab Navigation */}
+            <div className="mb-6 flex space-x-2 bg-white/70 backdrop-blur-sm rounded-xl p-2 shadow-lg border border-purple-100">
+              <button
+                onClick={() => setActiveTab('dashboard')}
+                className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-semibold transition-all ${
+                  activeTab === 'dashboard'
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+                    : 'text-gray-600 hover:bg-purple-50'
+                }`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Dashboard</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('users')}
+                className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-semibold transition-all ${
+                  activeTab === 'users'
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+                    : 'text-gray-600 hover:bg-purple-50'
+                }`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>User Management</span>
+              </button>
             </div>
-            
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-purple-100 hover:shadow-2xl transition-shadow">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="bg-gradient-to-br from-blue-500 to-cyan-500 p-3 rounded-xl shadow-lg">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                  </svg>
+
+            {/* Tab Content */}
+            {activeTab === 'dashboard' ? (
+              <div className="grid lg:grid-cols-2 gap-6">
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-purple-100 hover:shadow-2xl transition-shadow">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-3 rounded-xl shadow-lg">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-800">Instructions</h3>
+                  </div>
+                  <AllInstruction isHeadmaster={true} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800">Feedback</h3>
+                
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-purple-100 hover:shadow-2xl transition-shadow">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <div className="bg-gradient-to-br from-blue-500 to-cyan-500 p-3 rounded-xl shadow-lg">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-800">Feedback</h3>
+                  </div>
+                  <AllFeedBack isHeadmaster={true} />
+                </div>
               </div>
-              <AllFeedBack isHeadmaster={true} />
-            </div>
-          </div>
+            ) : (
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-purple-100">
+                <UserManagement />
+              </div>
+            )}
+          </>
         )}
       </section>
 

@@ -163,6 +163,100 @@ class FeedbackDetailView(APIView):
         except Feedback.DoesNotExist:
             return Response({'error': 'Feedback not found'}, status=404)
 
+
+class UserManagementView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        role = UserProfile.objects.get(user=request.user).role
+        if role != 'Headmaster':
+            return Response({'error': 'Only headmaster can access user management'}, status=403)
+        
+        # Get all users with their profiles
+        users = User.objects.all()
+        user_data = []
+        
+        for user in users:
+            profile = UserProfile.objects.filter(user=user).first()
+            user_data.append({
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'role': profile.role if profile else 'No Role',
+                'date_joined': user.date_joined,
+                'last_login': user.last_login
+            })
+        
+        return Response(user_data, status=200)
+
+
+class UserDetailManagementView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk):
+        role = UserProfile.objects.get(user=request.user).role
+        if role != 'Headmaster':
+            return Response({'error': 'Only headmaster can edit users'}, status=403)
+        
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
+        
+        # Update user fields
+        if 'username' in request.data:
+            # Check if username already exists (excluding current user)
+            if User.objects.filter(username=request.data['username']).exclude(pk=pk).exists():
+                return Response({'error': 'Username already exists'}, status=400)
+            user.username = request.data['username']
+        
+        if 'email' in request.data:
+            # Check if email already exists (excluding current user)
+            if User.objects.filter(email=request.data['email']).exclude(pk=pk).exists():
+                return Response({'error': 'Email already exists'}, status=400)
+            user.email = request.data['email']
+        
+        if 'password' in request.data and request.data['password']:
+            user.set_password(request.data['password'])
+        
+        user.save()
+        
+        # Update role if provided
+        if 'role' in request.data:
+            profile = UserProfile.objects.filter(user=user).first()
+            if profile:
+                profile.role = request.data['role']
+                profile.save()
+            else:
+                UserProfile.objects.create(user=user, role=request.data['role'])
+        
+        return Response({
+            'message': 'User updated successfully',
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'role': UserProfile.objects.get(user=user).role
+            }
+        }, status=200)
+
+    def delete(self, request, pk):
+        role = UserProfile.objects.get(user=request.user).role
+        if role != 'Headmaster':
+            return Response({'error': 'Only headmaster can delete users'}, status=403)
+        
+        # Prevent headmaster from deleting themselves
+        if request.user.id == pk:
+            return Response({'error': 'You cannot delete your own account'}, status=400)
+        
+        try:
+            user = User.objects.get(pk=pk)
+            username = user.username
+            user.delete()
+            return Response({'message': f'User {username} deleted successfully'}, status=200)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
+
 class InstructionView(APIView):
 
     permission_classes = [IsAuthenticated]
