@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./School
+    container_name: django-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./School:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  frontend:
+    build: ./school-frontend
+    container_name: react-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
