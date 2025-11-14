@@ -108,6 +108,16 @@ class FeedbackView(APIView):
         print(role)
         if role == 'Teacher' or role == 'Headmaster':
             feedbacks = Feedback.objects.all()
+            
+            # Search functionality
+            search_query = request.query_params.get('search', None)
+            if search_query:
+                feedbacks = feedbacks.filter(
+                    content__icontains=search_query
+                ) | feedbacks.filter(
+                    student__username__icontains=search_query
+                )
+            
             return Response(FeedbackSerializer(feedbacks, many=True).data)
         return Response({'error': 'Access Denied'}, status=403)
 
@@ -129,6 +139,16 @@ class InstructionView(APIView):
         role = UserProfile.objects.get(user=request.user).role
         if role in ['Student', 'Headmaster']:
             instructions = Instruction.objects.all()
+            
+            # Search functionality
+            search_query = request.query_params.get('search', None)
+            if search_query:
+                instructions = instructions.filter(
+                    content__icontains=search_query
+                ) | instructions.filter(
+                    teacher__username__icontains=search_query
+                )
+            
             return Response(InstructionSerializer(instructions, many=True).data)
         return Response({'error': 'Access Denied'}, status=403)
 
