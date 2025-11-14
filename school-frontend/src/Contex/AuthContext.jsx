@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         console.log("Work");
         try {
-            let response = await fetch('http://127.0.0.1:8000/api/login/', {
+            let response = await fetch('https://school-backend-nwxn.onrender.com/api/login/', {
                 method: 'POST',
                 headers: {
                     'content-Type': 'application/json'
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         console.log("Work");
         try {
-            let response = await fetch('http://127.0.0.1:8000/api/register/', {
+            let response = await fetch('https://school-backend-nwxn.onrender.com/api/register/', {
                 method: 'POST',
                 headers: {
                     'content-Type': 'application/json'
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
     }
     const userprofile = async (access) => {
         try {
-            let response = await fetch('http://127.0.0.1:8000/api/me/', {
+            let response = await fetch('https://school-backend-nwxn.onrender.com/api/me/', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }) => {
         try {
             let authToken = JSON.parse(localStorage.getItem('authToken'))
             let access = authToken
-            let response = await fetch('http://127.0.0.1:8000/api/feedback/', {
+            let response = await fetch('https://school-backend-nwxn.onrender.com/api/feedback/', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -157,7 +157,7 @@ export const AuthProvider = ({ children }) => {
         try {
             let authToken = JSON.parse(localStorage.getItem('authToken'))
             let access = authToken
-            let response = await fetch('http://127.0.0.1:8000/api/instructions/', {
+            let response = await fetch('https://school-backend-nwxn.onrender.com/api/instructions/', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${access}`,

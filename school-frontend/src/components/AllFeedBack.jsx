@@ -28,8 +28,8 @@ const AllFeedBack = ({ isHeadmaster = false }) => {
         let authToken = JSON.parse(localStorage.getItem('authToken'))
         let access = authToken
         const url = search 
-            ? `http://127.0.0.1:8000/api/feedback/?search=${encodeURIComponent(search)}`
-            : 'http://127.0.0.1:8000/api/feedback/'
+            ? `https://school-backend-nwxn.onrender.com/api/feedback/?search=${encodeURIComponent(search)}`
+            : 'https://school-backend-nwxn.onrender.com/api/feedback/'
         
         let response = await fetch(url, {
             method: 'GET',
@@ -65,7 +65,7 @@ const AllFeedBack = ({ isHeadmaster = false }) => {
         let access = authToken
         
         try {
-            let response = await fetch(`http://127.0.0.1:8000/api/feedback/${id}/`, {
+            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/feedback/${id}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -97,7 +97,7 @@ const AllFeedBack = ({ isHeadmaster = false }) => {
         let access = authToken
         
         try {
-            let response = await fetch(`http://127.0.0.1:8000/api/feedback/${id}/`, {
+            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/feedback/${id}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${access}`,

@@ -35,7 +35,7 @@ const UserManagement = () => {
         let access = authToken
         
         try {
-            let response = await fetch('http://127.0.0.1:8000/api/users/', {
+            let response = await fetch('https://school-backend-nwxn.onrender.com/api/users/', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -80,7 +80,7 @@ const UserManagement = () => {
         let access = authToken
         
         try {
-            let response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/`, {
+            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/users/${userId}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -112,7 +112,7 @@ const UserManagement = () => {
         let access = authToken
         
         try {
-            let response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/`, {
+            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/users/${userId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${access}`,

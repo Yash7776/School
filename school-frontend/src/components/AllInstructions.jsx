@@ -28,8 +28,8 @@ const AllInstructions = ({ isHeadmaster = false }) => {
         let authToken = JSON.parse(localStorage.getItem('authToken'))
         let access = authToken
         const url = search 
-            ? `http://127.0.0.1:8000/api/instructions/?search=${encodeURIComponent(search)}`
-            : 'http://127.0.0.1:8000/api/instructions/'
+            ? `https://school-backend-nwxn.onrender.com/api/instructions/?search=${encodeURIComponent(search)}`
+            : 'https://school-backend-nwxn.onrender.com/api/instructions/'
         
         let response = await fetch(url, {
             method: 'GET',
@@ -65,7 +65,7 @@ const AllInstructions = ({ isHeadmaster = false }) => {
         let access = authToken
         
         try {
-            let response = await fetch(`http://127.0.0.1:8000/api/instructions/${id}/`, {
+            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/instructions/${id}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -97,7 +97,7 @@ const AllInstructions = ({ isHeadmaster = false }) => {
         let access = authToken
         
         try {
-            let response = await fetch(`http://127.0.0.1:8000/api/instructions/${id}/`, {
+            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/instructions/${id}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${access}`,
