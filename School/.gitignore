@@ -18,15 +18,13 @@ ENV/
 *.pot
 *.pyc
 *.mo
-*.sqlite3
-db.sqlite3
 media/
 staticfiles/
 
 # Django migrations
-*/migrations/__pycache__/
-*/migrations/*.py[cod]
-*/migrations/*.py
+/migrations/__pycache__/
+/migrations/*.py[cod]
+/migrations/*.py
 
 # DRF browsable API cache
 *.db
