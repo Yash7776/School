@@ -8,6 +8,8 @@ const AuthContext = createContext();
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
+    const BACKEND_API = "https://school-backend-nwxn.onrender.com";
+
     let [authToken, setauthToken] = useState(() => localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null)
     let [user, setUser] = useState(() => localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('data')) : null)
     let navigate = useNavigate();
@@ -19,7 +21,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         console.log("Work");
         try {
-            let response = await fetch('https://school-backend-nwxn.onrender.com/api/login/', {
+            let response = await fetch(`${BACKEND_API}/api/login/`, {
                 method: 'POST',
                 headers: {
                     'content-Type': 'application/json'
@@ -28,7 +30,7 @@ export const AuthProvider = ({ children }) => {
                     'username': e.target.username.value,
                     'password': e.target.password.value
                 })
-            })
+            });
 
             let data = await response.json()
             console.log({ 'data': data })
@@ -59,7 +61,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         console.log("Work");
         try {
-            let response = await fetch('https://school-backend-nwxn.onrender.com/api/register/', {
+            let response = await fetch(`${BACKEND_API}/api/register/`, {
                 method: 'POST',
                 headers: {
                     'content-Type': 'application/json'
@@ -94,7 +96,7 @@ export const AuthProvider = ({ children }) => {
     }
     const userprofile = async (access) => {
         try {
-            let response = await fetch('https://school-backend-nwxn.onrender.com/api/me/', {
+            let response = await fetch(`${BACKEND_API}/api/me/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -121,7 +123,7 @@ export const AuthProvider = ({ children }) => {
         try {
             let authToken = JSON.parse(localStorage.getItem('authToken'))
             let access = authToken
-            let response = await fetch('https://school-backend-nwxn.onrender.com/api/feedback/', {
+            let response = await fetch(`${BACKEND_API}/api/feedback/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -157,7 +159,7 @@ export const AuthProvider = ({ children }) => {
         try {
             let authToken = JSON.parse(localStorage.getItem('authToken'))
             let access = authToken
-            let response = await fetch('https://school-backend-nwxn.onrender.com/api/instructions/', {
+            let response = await fetch(`${BACKEND_API}/api/instructions/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -203,6 +205,7 @@ export const AuthProvider = ({ children }) => {
         logoutUser: logoutUser,
         postFeedBack: postFeedBack,
         postInstruction: postInstruction,
+        BACKEND_API:BACKEND_API,
     }
 
     return (

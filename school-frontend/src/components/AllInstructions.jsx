@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
-
+import AuthContext from '../Contex/AuthContext.jsx';
+import { useContext } from 'react';
 const AllInstructions = ({ isHeadmaster = false }) => {
+
+    const { BACKEND_API } = useContext(AuthContext)
+
     const [instruction, setinstruction] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
     const [filteredInstructions, setFilteredInstructions] = useState([])
@@ -28,8 +32,8 @@ const AllInstructions = ({ isHeadmaster = false }) => {
         let authToken = JSON.parse(localStorage.getItem('authToken'))
         let access = authToken
         const url = search 
-            ? `https://school-backend-nwxn.onrender.com/api/instructions/?search=${encodeURIComponent(search)}`
-            : 'https://school-backend-nwxn.onrender.com/api/instructions/'
+            ? `${BACKEND_API}/api/instructions/?search=${encodeURIComponent(search)}`
+            : `${BACKEND_API}/api/instructions/`
         
         let response = await fetch(url, {
             method: 'GET',
@@ -65,7 +69,7 @@ const AllInstructions = ({ isHeadmaster = false }) => {
         let access = authToken
         
         try {
-            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/instructions/${id}/`, {
+            let response = await fetch(`${BACKEND_API}/api/instructions/${id}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -97,7 +101,7 @@ const AllInstructions = ({ isHeadmaster = false }) => {
         let access = authToken
         
         try {
-            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/instructions/${id}/`, {
+            let response = await fetch(`${BACKEND_API}/api/instructions/${id}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${access}`,

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
+import AuthContext from '../Contex/AuthContext.jsx';
+import { useContext } from 'react';
+
 const UserManagement = () => {
+
+    const { BACKEND_API } = useContext(AuthContext)
+
     const [users, setUsers] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
     const [filteredUsers, setFilteredUsers] = useState([])
@@ -35,7 +41,7 @@ const UserManagement = () => {
         let access = authToken
         
         try {
-            let response = await fetch('https://school-backend-nwxn.onrender.com/api/users/', {
+            let response = await fetch(`${BACKEND_API}/api/users/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -80,7 +86,7 @@ const UserManagement = () => {
         let access = authToken
         
         try {
-            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/users/${userId}/`, {
+            let response = await fetch(`${BACKEND_API}/api/users/${userId}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -112,7 +118,7 @@ const UserManagement = () => {
         let access = authToken
         
         try {
-            let response = await fetch(`https://school-backend-nwxn.onrender.com/api/users/${userId}/`, {
+            let response = await fetch(`${BACKEND_API}/api/users/${userId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${access}`,
